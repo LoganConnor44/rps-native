@@ -11,7 +11,7 @@ const authentication = StyleSheet.create({
 	},
 	icons: {
 		display: 'flex',
-		flex: 2,
+		flex: 1.5,
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -20,6 +20,7 @@ const authentication = StyleSheet.create({
 		transform: [{rotate: '-90deg'}]
 	},
 	card: {
+		display: 'flex',
 		flex: 1,
 		borderTopLeftRadius: 30,
 		borderTopRightRadius: 30,
@@ -28,6 +29,7 @@ const authentication = StyleSheet.create({
 	},
 	textInfo: {
 		display: 'flex',
+		flex: 2,
 		flexDirection: 'column',
 		alignItems: 'center',
 		textAlign: 'center',
@@ -36,16 +38,15 @@ const authentication = StyleSheet.create({
 	},
 	h1: {
 		margin: 10,
-		fontSize: normalizeFontSize(45)
+		fontSize: normalizeFontSize(40)
 	},
 	text: {
 		textAlign: 'center',
 		margin: 10,
 		fontSize: normalizeFontSize(16)
 	},
-	buttons: {
-		marginTop: 'auto',
-		paddingBottom: 1.5,
+	logIn: {
+		flex: 0.45,
 		width: '75%'
 	}
 });
