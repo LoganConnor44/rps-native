@@ -8,8 +8,8 @@ import runSpring from '../utilities/run-spring';
 
 class LogInCard extends React.Component<null, State> {
     private animationTime: Animated.Clock;
-    private translateY: AnimatedNode<number>;
-    private originalY: Animated.Value<number>;
+    private translateToY: AnimatedNode<number>;
+    private cardY: Animated.Value<number>;
     private dragY: Animated.Value<number>;
     private dragVelocity: Animated.Value<number>;
     private dragState: Animated.Value<number>;
@@ -19,28 +19,31 @@ class LogInCard extends React.Component<null, State> {
         super(props);
 
         this.animationTime = new Animated.Clock();
-        this.originalY = new Animated.Value(0);
+        this.cardY = new Animated.Value(0);
         this.dragY = new Animated.Value(0);
         this.dragVelocity = new Animated.Value(0);
         this.dragState = new Animated.Value(-1);
 
-        this.translateY = Animated.cond(
-            Animated.eq(this.dragState, State.ACTIVE),
-            [
-                Animated.stopClock(this.animationTime),
-                Animated.set(this.originalY, this.dragY),
-                this.originalY
-            ],
-            [
-                Animated.set(
-                    this.originalY,
-                    Animated.cond(
-                        Animated.defined(this.originalY),
-                        runSpring(this.animationTime, this.originalY, this.dragVelocity, 0),
-                        0
-                    )
+        const animatingLogic: Array<any> = [
+            Animated.stopClock(this.animationTime),
+            Animated.set(this.cardY, this.dragY),
+            this.cardY
+        ];
+        const notAnimatingLogic: Array<any> = [
+            Animated.set(
+                this.cardY,
+                Animated.cond(
+                    Animated.defined(this.cardY),
+                    runSpring(this.animationTime, this.cardY, this.dragVelocity, 0),
+                    0
                 )
-            ]
+            )
+        ];
+
+        this.translateToY = Animated.cond(
+            Animated.eq(this.dragState, State.ACTIVE),
+            animatingLogic,
+            notAnimatingLogic
         );
         this.onGestureEvent = Animated.event([{
             nativeEvent: {
@@ -51,11 +54,10 @@ class LogInCard extends React.Component<null, State> {
         }]);
     }
 
-
     render() {
         return (
             <PanGestureHandler onGestureEvent={this.onGestureEvent} onHandlerStateChange={this.onGestureEvent}>
-                <Animated.View style={[logInCard.main, {transform: [{translateY: this.translateY}]}]}>
+                <Animated.View style={[logInCard.main, {transform: [{translateY: this.translateToY}]}]}>
                     <Separator />
                     <View style={logInCard.textInfo}>
                         <Text style={logInCard.h1}>

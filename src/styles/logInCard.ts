@@ -4,11 +4,11 @@ import normalizeFontSize from '../utilities/noramlize-font-size';
 const logInCard = StyleSheet.create({
 	main: {
 		display: 'flex',
-		flex: 1,
+		flexGrow: 1,
 		borderTopLeftRadius: 30,
 		borderTopRightRadius: 30,
 		backgroundColor: '#dfe6e9',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	textInfo: {
 		display: 'flex',
