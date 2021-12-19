@@ -4,8 +4,8 @@ import logInCard from '../styles/logInCard';
 import Separator from '../components/Separator';
 
 const LogInCard = () => {
-	return (
-		<View style={logInCard.main}>
+    return (
+        <View style={logInCard.main}>
             <Separator />
             <View style={logInCard.textInfo}>
                 <Text style={logInCard.h1}>
@@ -24,7 +24,7 @@ const LogInCard = () => {
                 />
             </View>
         </View>
-	);
+    );
 };
 
 export default LogInCard;

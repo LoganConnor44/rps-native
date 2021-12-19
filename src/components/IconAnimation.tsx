@@ -45,14 +45,14 @@ const IconAnimation = () => {
 
 	React.useEffect(() => {
 		rotateIcons()
-		}, []
+	}, []
 	);
 	return (
 		<View style={iconAnimation.main}>
-            <Animated.View style={{ opacity: opacity }} >
-                {icon}
-            </Animated.View>
-        </View>
+			<Animated.View style={{ opacity: opacity }} >
+				{icon}
+			</Animated.View>
+		</View>
 	);
 };
 
