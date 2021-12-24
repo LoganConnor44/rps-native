@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { Text, View, Button, Alert } from 'react-native';
+import { Text, View, Button, Alert, Dimensions } from 'react-native';
 import logInCard from '../styles/logInCard';
 import Separator from '../components/Separator';
 import Animated from 'react-native-reanimated';
-import { PanGestureHandler, State, AnimatedNode } from 'react-native-gesture-handler';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import runSpring from '../utilities/run-spring';
+import { snapPoint } from 'react-native-redash';
 
 class LogInCard extends React.Component<null, State> {
     private animationTime: Animated.Clock;
-    private translateToY: AnimatedNode<number>;
+    private translateToY: Animated.Node<number>;
     private cardY: Animated.Value<number>;
     private dragY: Animated.Value<number>;
     private dragVelocity: Animated.Value<number>;
@@ -24,6 +25,13 @@ class LogInCard extends React.Component<null, State> {
         this.dragVelocity = new Animated.Value(0);
         this.dragState = new Animated.Value(-1);
 
+        const SIZE = 100;
+        const {width, height} = Dimensions.get('screen');
+
+        const snapPointsX = [0, width - SIZE];
+        const snapPointsY = [0, height - SIZE];
+
+        const asdf = snapPoint(this.dragY, this.dragVelocity, snapPointsY);
         const animatingLogic: Array<any> = [
             Animated.stopClock(this.animationTime),
             Animated.set(this.cardY, this.dragY),
