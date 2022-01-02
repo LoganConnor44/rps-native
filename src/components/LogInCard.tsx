@@ -1,92 +1,37 @@
 import * as React from 'react';
-import { Text, View, Button, Alert, Dimensions } from 'react-native';
+import { Text, View, Dimensions, Button, Alert } from 'react-native';
 import logInCard from '../styles/logInCard';
 import Separator from '../components/Separator';
-import Animated from 'react-native-reanimated';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import runSpring from '../utilities/run-spring';
-import { snapPoint } from 'react-native-redash';
+import BottomSheet from 'reanimated-bottom-sheet';
 
-class LogInCard extends React.Component<null, State> {
-    private animationTime: Animated.Clock;
-    private translateToY: Animated.Node<number>;
-    private cardY: Animated.Value<number>;
-    private dragY: Animated.Value<number>;
-    private dragVelocity: Animated.Value<number>;
-    private dragState: Animated.Value<number>;
-    private onGestureEvent: (...args: any[]) => void;
-
-    constructor(props: null) {
-        super(props);
-
-        this.animationTime = new Animated.Clock();
-        this.cardY = new Animated.Value(0);
-        this.dragY = new Animated.Value(0);
-        this.dragVelocity = new Animated.Value(0);
-        this.dragState = new Animated.Value(-1);
-
-        const SIZE = 100;
-        const {width, height} = Dimensions.get('screen');
-
-        const snapPointsX = [0, width - SIZE];
-        const snapPointsY = [0, height - SIZE];
-
-        const asdf = snapPoint(this.dragY, this.dragVelocity, snapPointsY);
-        const animatingLogic: Array<any> = [
-            Animated.stopClock(this.animationTime),
-            Animated.set(this.cardY, this.dragY),
-            this.cardY
-        ];
-        const notAnimatingLogic: Array<any> = [
-            Animated.set(
-                this.cardY,
-                Animated.cond(
-                    Animated.defined(this.cardY),
-                    runSpring(this.animationTime, this.cardY, this.dragVelocity, 0),
-                    0
-                )
-            )
-        ];
-
-        this.translateToY = Animated.cond(
-            Animated.eq(this.dragState, State.ACTIVE),
-            animatingLogic,
-            notAnimatingLogic
-        );
-        this.onGestureEvent = Animated.event([{
-            nativeEvent: {
-                translationY: this.dragY,
-                velocity: this.dragVelocity,
-                state: this.dragState
-            },
-        }]);
-    }
-
-    render() {
-        return (
-            <PanGestureHandler onGestureEvent={this.onGestureEvent} onHandlerStateChange={this.onGestureEvent}>
-                <Animated.View style={[logInCard.main, {transform: [{translateY: this.translateToY}]}]}>
-                    <Separator />
-                    <View style={logInCard.textInfo}>
-                        <Text style={logInCard.h1}>
-                            RPS
-                        </Text>
-                        <Text style={logInCard.text}>
-                            A friendly game of rock, paper, scissors with real life consequences.
-                        </Text>
-                        <Text style={logInCard.text}>
-                            We&apos;ve been waiting for you.
-                        </Text>
-                    </View>
-                    <View style={logInCard.logIn}>
-                        <Button title="Ready Player One"
-                            onPress={() => Alert.alert('Simple Button pressed')}
-                        />
-                    </View>
-                </Animated.View>
-            </PanGestureHandler>
-        );
-    }
-};
+interface LogInCardProps {
+    bottomSheetRef: React.RefObject<BottomSheet>;
+}
+const LogInCard = (props: LogInCardProps) => {
+    const cardHeight = Dimensions.get('window').height / 2;
+    const dynamicCardStyles = {
+        height: cardHeight
+    };
+    
+    return (
+        <View style={ {...logInCard.main, ...dynamicCardStyles} }>
+            <Separator />
+            <View>
+                <Text style={logInCard.h1}>
+                    RPS
+                </Text>
+                <Text style={logInCard.text}>
+                    A friendly game of rock, paper, scissors with real life consequences.
+                </Text>
+                <Text style={logInCard.text}>
+                    We&apos;ve been waiting for you.
+                </Text>
+            </View>
+            <View style={logInCard.logIn}>
+                <Button title="Ready Player One" onPress={() => props.bottomSheetRef.current?.snapTo(2)} />
+            </View>
+        </View>
+    );
+}
 
 export default LogInCard;

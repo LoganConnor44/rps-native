@@ -8,6 +8,9 @@ const authentication = StyleSheet.create({
 		flexDirection: 'column',
 		backgroundColor: '#0984e3',
 		marginTop: 'auto'
+	},
+	bottomSheet: {
+		flex: 1
 	}
 });
 
